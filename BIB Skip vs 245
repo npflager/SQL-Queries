@@ -1,0 +1,15 @@
+/* SQL to determine a mismatch between the Sierra-specific field "Skip" and the second indicator of the 245 field*/
+
+SELECT DISTINCT
+	CONCAT('b',b.record_num,'a'), b.skip_num, p.marc_ind2
+FROM
+	sierra_view.bib_view b
+INNER JOIN
+	sierra_view.subfield p
+ON
+	b.id = p.record_id
+WHERE
+	p.marc_ind2 <> ''
+	AND	p.marc_tag = '245'
+	AND	CAST (b.skip_num AS INT) <> CAST (p.marc_ind2 AS INT)
+;
